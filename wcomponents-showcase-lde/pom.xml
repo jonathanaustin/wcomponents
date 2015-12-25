@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>wcomponents-examples-lde</name>
-	<artifactId>wcomponents-examples-lde</artifactId>
+	<name>wcomponents-showcase-lde</name>
+	<artifactId>wcomponents-showcase-lde</artifactId>
 
 	<parent>
 		<groupId>com.github.bordertech.wcomponents</groupId>
@@ -14,11 +15,18 @@
 
 	<packaging>jar</packaging>
 
-	<dependencies>
+	<description>
+		Showcase lde.
+	</description>
 
+	<properties>
+		<wc.qa.skip>false</wc.qa.skip>
+	</properties>
+
+	<dependencies>
 		<dependency>
 			<groupId>com.github.bordertech.wcomponents</groupId>
-			<artifactId>wcomponents-examples</artifactId>
+			<artifactId>wcomponents-showcase</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -38,6 +46,7 @@
 
 	<build>
 		<plugins>
+			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
@@ -54,7 +63,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.github.bordertech.wcomponents.examples.lde.StandaloneLauncherProxy</mainClass>
+							<mainClass>com.github.bordertech.wcomponents.showcase.lde.StandaloneLauncherProxy</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

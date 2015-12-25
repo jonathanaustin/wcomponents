@@ -639,6 +639,8 @@
 		<module>wcomponents-test-lib</module>
 		<module>wcomponents-theme-parent</module>
 		<module>wcomponents-bundle</module>
+		<module>wcomponents-showcase</module>
+		<module>wcomponents-showcase-lde</module>
 	</modules>
 
 </project>

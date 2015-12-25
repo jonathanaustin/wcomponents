@@ -41,12 +41,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.github.bordertech.wcomponents</groupId>
-			<artifactId>wcomponents-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.bordertech.wcomponents</groupId>
 			<artifactId>wcomponents-lde</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -55,12 +49,6 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>2.20.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-			<version>${jetty.version}</version>
 		</dependency>
 
 		<dependency>
