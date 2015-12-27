@@ -19,10 +19,11 @@
 		Showcase lde.
 	</description>
 
+<!--
 	<properties>
 		<wc.qa.skip>false</wc.qa.skip>
 	</properties>
-
+-->
 	<dependencies>
 		<dependency>
 			<groupId>com.github.bordertech.wcomponents</groupId>
