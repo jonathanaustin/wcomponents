@@ -104,6 +104,11 @@ final class WPanelRenderer extends AbstractWebXmlRenderer {
 	 * @return the panel type to be included in the xml
 	 */
 	private String getPanelType(final WPanel panel) {
+
+		if (panel.getType() == null) {
+			return null;
+		}
+
 		String type = null;
 
 		switch (panel.getType()) {
