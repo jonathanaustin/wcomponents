@@ -511,6 +511,25 @@ public class WTable extends WBeanComponent implements Container, AjaxTarget, Sub
 	}
 
 	/**
+	 * Sets whether the de/selection of a row with sub rows should de/select the sub rows. This is a client-side only
+	 * feature.
+	 *
+	 * @param toggleSubRowSelection true to turn on this feature.
+	 */
+	public void setToggleSubRowSelection(final boolean toggleSubRowSelection) {
+		getOrCreateComponentModel().toggleSubRowSelection = toggleSubRowSelection;
+	}
+
+	/**
+	 * Indicates whether de/selecting a row with sub row(s) will de/select the sub row(s).
+	 *
+	 * @return true if this feature is enabled.
+	 */
+	public boolean isToggleSubRowSelection() {
+		return getComponentModel().toggleSubRowSelection;
+	}
+
+	/**
 	 * @return the striping type used to highlight alternate rows or columns
 	 */
 	public StripingType getStripingType() {
@@ -886,6 +905,21 @@ public class WTable extends WBeanComponent implements Container, AjaxTarget, Sub
 	 */
 	public boolean isExpandAll() {
 		return getComponentModel().expandAll;
+	}
+
+	/**
+	 * Set the table as having row headers.
+	 * @param rowHeaders indicates that the first data column in the table should be considered a row header.
+	 */
+	public void setRowHeaders(final boolean rowHeaders) {
+		getOrCreateComponentModel().rowHeaders = rowHeaders;
+	}
+
+	/**
+	 * @return is the first data column a row header column?
+	 */
+	public boolean isRowHeaders() {
+		return getComponentModel().rowHeaders;
 	}
 
 	/**
@@ -1994,6 +2028,11 @@ public class WTable extends WBeanComponent implements Container, AjaxTarget, Sub
 		 */
 		private Set<?> selectedRows;
 
+		/**
+		 * Indicates that de/selecting a row with sub rows will de/select the sub rows.
+		 */
+		private boolean toggleSubRowSelection = false;
+
 		// Row expansion
 		/**
 		 * Indicates how row expansion should function.
@@ -2080,6 +2119,11 @@ public class WTable extends WBeanComponent implements Container, AjaxTarget, Sub
 
 			constraintForComponent.add(constraint);
 		}
+
+		/**
+		 * Indicates that the first data column in the table is considered a row header.
+		 */
+		private boolean rowHeaders;
 	}
 
 	/**

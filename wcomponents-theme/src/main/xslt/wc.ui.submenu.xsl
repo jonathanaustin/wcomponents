@@ -83,23 +83,24 @@
 				certainly avoid it for automated testing.
 			-->
 			<xsl:call-template name="makeCommonClass"/>
-			<xsl:attribute name="aria-expanded">
-				<xsl:choose>
-					<xsl:when test="$open=1">
-						<xsl:copy-of select="$t"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>false</xsl:text>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
+			<xsl:if test="$type='tree'">
+				<xsl:attribute name="aria-expanded">
+					<xsl:choose>
+						<xsl:when test="$open=1">
+							<xsl:copy-of select="$t"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>false</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
+			</xsl:if>
 			<xsl:if test="@selectMode and not($type='tree')">
 				<xsl:attribute name="data-wc-selectmode">
 					<xsl:value-of select="@selectMode"/>
 				</xsl:attribute>
 			</xsl:if>
 			<xsl:call-template name="hideElementIfHiddenSet"/>
-
 			<xsl:attribute name="role">
 				<xsl:choose>
 					<xsl:when test="$type='tree'"><!-- this will only be met if we can get to the ancestor menu -->
@@ -199,10 +200,11 @@
 						</xsl:attribute>
 					</xsl:otherwise>
 				</xsl:choose>
-				<xsl:apply-templates select="ui:decoratedLabel"/>
+				<xsl:apply-templates select="ui:decoratedlabel"/>
 			</xsl:element>
 			<xsl:apply-templates select="ui:content" mode="submenu">
 				<xsl:with-param name="open" select="$open"/>
+				<xsl:with-param name="type" select="$type"/>
 			</xsl:apply-templates>
 		</xsl:element>
 	</xsl:template>

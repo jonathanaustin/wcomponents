@@ -16,7 +16,7 @@
 
 		This is long but reasonably straight-forward generation of HTML tables.
 
-		There are two modes of table which differ in how nested rows (ui:subTrs)
+		There are two modes of table which differ in how nested rows (ui:subtrs)
 		are treated. Type "table" (assumed if attribute not present) makes all rows sit
 		directly under each other. Type "hierarchic" indents child rows. This causes a
 		few issues since the rows are not actual children but siblings.
@@ -56,6 +56,12 @@
 				<xsl:number value="1"/>
 			</xsl:if>
 		</xsl:variable>
+		
+		<xsl:variable name="hasToggleSelectMode">
+			<xsl:if test="ui:rowselection[@toggle and @multiple] and ui:rowexpansion and ui:tbody/ui:tr/ui:subtr">
+				<xsl:number value="1"/>
+			</xsl:if>
+		</xsl:variable>
 
 		<div id="{$id}">
 			<xsl:attribute name="class">
@@ -66,7 +72,7 @@
 
 			<xsl:call-template name="hideElementIfHiddenSet"/>
 
-			<xsl:if test="ui:pagination[@mode='dynamic' or @mode='client'] or ui:rowExpansion[@mode='lazy' or @mode='dynamic'] or ui:sort[@mode='dynamic'] or key('targetKey',$id) or parent::ui:ajaxTarget[@action='replace']">
+			<xsl:if test="ui:pagination[@mode='dynamic' or @mode='client'] or ui:rowexpansion[@mode='lazy' or @mode='dynamic'] or ui:sort[@mode='dynamic'] or key('targetKey',$id) or parent::ui:ajaxtarget[@action='replace']">
 				<xsl:call-template name="setARIALive"/>
 			</xsl:if>
 
@@ -94,14 +100,14 @@
 			<!-- THIS IS WHERE THE DIV's CONTENT STARTS NO MORE ATTRIBUTES AFTER THIS POINT THANK YOU! -->
 
 			<xsl:choose>
-				<xsl:when test="ui:tbody/ui:noData">
+				<xsl:when test="ui:tbody/ui:nodata">
 					<!-- short-circuit a whole pile of pain if we have nothing to show. -->
-					<xsl:apply-templates select="ui:tbody/ui:noData"/>
+					<xsl:apply-templates select="ui:tbody/ui:nodata"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="rowExpansion">
 						<xsl:choose>
-							<xsl:when test="ui:rowExpansion">
+							<xsl:when test="ui:rowexpansion">
 								<xsl:value-of select="1"/>
 							</xsl:when>
 							<xsl:otherwise>
@@ -112,7 +118,7 @@
 
 					<xsl:variable name="rowSelection">
 						<xsl:choose>
-							<xsl:when test="ui:rowSelection">
+							<xsl:when test="ui:rowselection">
 								<xsl:value-of select="1"/>
 							</xsl:when>
 							<xsl:otherwise>
@@ -137,6 +143,9 @@
 						<xsl:if test="@type='hierarchic'">
 							<xsl:text> hierarchic</xsl:text>
 						</xsl:if>
+						<xsl:if test="$hasToggleSelectMode = 1">
+							<xsl:text> wc_table_hastoggleselect</xsl:text>
+						</xsl:if>
 					</xsl:variable>
 
 					<table>
@@ -155,7 +164,7 @@
 							<xsl:if test="$rowSelection=1">
 								<xsl:attribute name="aria-multiselectable">
 									<xsl:choose>
-										<xsl:when test="ui:rowSelection/@multiple">
+										<xsl:when test="ui:rowselection/@multiple">
 											<xsl:text>true</xsl:text>
 										</xsl:when>
 										<xsl:otherwise>
@@ -196,7 +205,13 @@
 							</xsl:if>
 
 							<xsl:if test="$rowSelection=1">
-								<col class="wc_table_colauto">
+								<col>
+									<xsl:attribute name="class">
+										<xsl:text>wc_table_colauto</xsl:text>
+										<xsl:if test="$hasToggleSelectMode = 1">
+											<xsl:text> wc_table_col_hasmenu</xsl:text>
+										</xsl:if>
+									</xsl:attribute>
 									<xsl:if test="$isDebug=1">
 										<xsl:comment>row selection column</xsl:comment>
 									</xsl:if>

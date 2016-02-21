@@ -6,16 +6,47 @@
 	
 		NOTE: This template does not make the individual rows selectable. That is done in the transform of ui:tr.
 	
-		NOTE 2: Removed support for ui:rowSelection/@submitOnChange due to usability and accessibility failure. If the
+		NOTE 2: Removed support for ui:rowselection/@submitOnChange due to usability and accessibility failure. If the
 		selection mode is single selection there is no way to select a row more than 1 row from the currently selected row
-		without using a pointing device of some kind. The attribute ui:rowSelection/@submitOnChange is still used to create
+		without using a pointing device of some kind. The attribute ui:rowselection/@submitOnChange is still used to create
 		round-trip mode select/deselect all controls.
 	-->
-	<xsl:template match="ui:rowSelection">
-		<xsl:if test="..//ui:tr[not(@unselectable)]">
+	<xsl:template match="ui:rowselection">
+		<xsl:variable name="tableId" select="../@id"/>
+		<xsl:variable name="numberOfRows" select="count(..//ui:tr[not(@unselectable) and ancestor::ui:table[1]/@id = $tableId])"/>
+		<xsl:if test="$numberOfRows &gt; 0">
+			<xsl:variable name="numberSelectedRows" select="count(..//ui:tr[@selected and ancestor::ui:table[1]/@id = $tableId])"/>
 			<xsl:variable name="selected">
 				<xsl:choose>
-					<xsl:when test="count(..//ui:tr[not(@unselectable)]) = count(..//ui:tr[@selected])">
+					<xsl:when test="$numberSelectedRows = 0">
+						<xsl:text>none</xsl:text>
+					</xsl:when>
+					<xsl:when test="@toggle">
+						<!-- 
+							When in parent row is a select toggle mode:
+							* any row which is selected but 
+							* has descendant rows (in the same table)  which are not selected
+							* is **deemed to be unselected**.
+							
+							This is a horrible calculation and I wish I did not have to do it.
+							-->
+						<xsl:variable name="numberUnselectedParentRows" 
+							select="count(..//ui:tr[@selected and 
+								ancestor::ui:table[1]/@id = $tableId and 
+								.//ui:subtr[ancestor::ui:table[1]/@id = $tableId]/ui:tr[not(@unselectable or @selected)]])"/>
+						<xsl:choose>
+							<xsl:when test="$numberSelectedRows = $numberUnselectedParentRows">
+								<xsl:text>none</xsl:text>
+							</xsl:when>
+							<xsl:when test="$numberUnselectedParentRows = 0 and $numberSelectedRows = $numberOfRows">
+								<xsl:text>all</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>some</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:when test="$numberOfRows = $numberSelectedRows">
 						<xsl:text>all</xsl:text>
 					</xsl:when>
 					<xsl:when test="count(..//ui:tr[@selected])=0">

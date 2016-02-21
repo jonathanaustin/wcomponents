@@ -23,9 +23,10 @@ define(["wc/dom/initialise",
 		"wc/ui/onloadFocusControl",
 		"wc/dom/isEventInLabel",
 		"wc/dom/isAcceptableTarget",
-		"wc/timers"],
-	/** @param initialise @param Widget @param event @param formUpdateManager @param attribute @param ajaxRegion @param processResponse @param onloadFocusControl @param isEventInLabel @param isAcceptableEventTarget @param timers @ignore */
-	function(initialise, Widget, event, formUpdateManager, attribute, group, ajaxRegion, processResponse, onloadFocusControl, isEventInLabel, isAcceptableEventTarget, timers) {
+		"wc/timers",
+		"wc/ui/table/common"],
+	/** @param initialise @param Widget @param event @param formUpdateManager @param attribute @param ajaxRegion @param processResponse @param onloadFocusControl @param isEventInLabel @param isAcceptableEventTarget @param timers @param common @ignore */
+	function(initialise, Widget, event, formUpdateManager, attribute, group, ajaxRegion, processResponse, onloadFocusControl, isEventInLabel, isAcceptableEventTarget, timers, common) {
 		"use strict";
 
 		/**
@@ -41,16 +42,15 @@ define(["wc/dom/initialise",
 			 * @type {module:wc/dom/Widget}
 			 * @private
 			 */
-			var TABLE_WRAPPER = new Widget("div", "table"),
-				SORTABLE_TABLE = new Widget("table", "", {"sortable": null}),
-				THEAD = new Widget("thead"),
-				SORT_CONTROL = new Widget("th", "", {"aria-sort": null}),
+			var TABLE_WRAPPER = common.WRAPPER,
+				SORTABLE_TABLE = common.TABLE.extend("", {"sortable": null}),
+				THEAD = common.THEAD,
+				SORT_CONTROL = common.TH.extend("", {"aria-sort": null}),
 				ID_EXTENDER = "${wc.ui.table.id.thead.th.suffix}",
 				BOOTSTRAPPED = "wc.ui.table.sort.BS",
 				SORT_ATTRIB = "sorted",
 				ARIA_SORT_ATTRIB = "aria-sort",
 				SORTED_COL = SORT_CONTROL.extend("", {"sorted": null}),
-				ACTIVE_CONTROL_ID,
 				FORM;
 
 			THEAD.descendFrom(SORTABLE_TABLE, true);
@@ -98,7 +98,6 @@ define(["wc/dom/initialise",
 					sorted,
 					controlGroup;
 				if (element === target || (!isEventInLabel(target) && isAcceptableEventTarget(element, target))) {
-					ACTIVE_CONTROL_ID = id;
 					sorted = element.getAttribute(SORT_ATTRIB);
 
 					if (!sorted || sorted.indexOf("reversed") > -1) {
@@ -141,14 +140,12 @@ define(["wc/dom/initialise",
 
 			function clickEvent($event) {
 				var element;
-				ACTIVE_CONTROL_ID = null;
 				if (!$event.defaultPrevented && (element = SORT_CONTROL.findAncestor($event.target))) {
 					toggleEventHelper($event, element);
 				}
 			}
 
 			function keydownEvent($event) {
-				ACTIVE_CONTROL_ID = null;
 				if ($event.defaultPrevented) {
 					return;
 				}

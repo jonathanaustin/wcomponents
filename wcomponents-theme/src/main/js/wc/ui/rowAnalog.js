@@ -4,16 +4,20 @@
  * @extends module:wc/dom/ariaAnalog
  * @requires module:wc/dom/ariaAnalog
  * @requires module:wc/dom/initialise
- * @requires module:wc/dom/Widget
+ * @requires module:wc/ui/table/common
  */
-define(["wc/dom/ariaAnalog", "wc/dom/initialise", "wc/dom/Widget"],
-	/** @param ariaAnalog wc/dom/ariaAnalog @param initialise wc/dom/initialise @param Widget wc/dom/Widget @ignore */
-	function(ariaAnalog, initialise, Widget) {
+define(["wc/dom/ariaAnalog",
+		"wc/dom/initialise",
+		"wc/ui/table/common"],
+	/** @param ariaAnalog wc/dom/ariaAnalog @param initialise wc/dom/initialise @param table @ignore */
+	function(ariaAnalog, initialise, table) {
 		"use strict";
+
+		/* Unused dependency: selectToggle is required implicitly. It is probably loaded but we cannot be sure. */
+
 		/**
 		 * @constructor
 		 * @alias module:wc/ui/RowAnalog~RowAnalog
-		 * @extends module:wc/dom/ariaAnalog~AriaAnalog
 		 * @private
 		 */
 		function RowAnalog() {
@@ -46,7 +50,7 @@ define(["wc/dom/ariaAnalog", "wc/dom/initialise", "wc/dom/Widget"],
 			 * @type {module:wc/dom/Widget}
 			 * @override
 			 */
-			this.ITEM = new Widget("", "", {"role": "row", "aria-selected": null});
+			this.ITEM = table.ROW.extend("", {"aria-selected": null});
 
 			/**
 			 * Holds a reference to the last activated member of any identified listBox analog keyed on the listbox
@@ -69,7 +73,7 @@ define(["wc/dom/ariaAnalog", "wc/dom/initialise", "wc/dom/Widget"],
 			 * @type {module:wc/dom/Widget}
 			 * @override
 			 */
-			this.CONTAINER = new Widget("table");
+			this.CONTAINER = table.TABLE;
 		}
 
 		RowAnalog.prototype = ariaAnalog;

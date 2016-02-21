@@ -160,7 +160,7 @@ define(["wc/ui/menu/core", "wc/dom/keyWalker", "wc/dom/shed", "wc/dom/Widget", "
 						item = this._getBranch(item);
 					}
 					if (this._isBranch(item)) {
-						if (shed.isExpanded(item)) {
+						if (shed.isExpanded(this._getBranchExpandableElement(item))) {
 							this._keyMap[VK_UP] = keyWalker.MOVE_TO.LAST_CHILD;  // "lastChildItem";
 							this._keyMap[VK_DOWN] = keyWalker.MOVE_TO.CHILD;
 						}
@@ -223,7 +223,7 @@ define(["wc/ui/menu/core", "wc/dom/keyWalker", "wc/dom/shed", "wc/dom/Widget", "
 				if (childCount > 1 && BANNER.findAncestor(nextMenu)) {
 					branchElement = document.createElement("div");
 					branchElement.setAttribute(ROLE, "menuitem");
-					branchElement.className = "submenu";
+					branchElement.className = "wc-submenu";
 					branchElement.setAttribute("aria-expanded", "false");
 					button = document.createElement("button");
 					button.type = "button";
@@ -235,7 +235,7 @@ define(["wc/ui/menu/core", "wc/dom/keyWalker", "wc/dom/shed", "wc/dom/Widget", "
 					branchElement.appendChild(button);
 
 					submenuContentElement = document.createElement("div");
-					submenuContentElement.className = "submenucontent";
+					submenuContentElement.className = "wc_submenucontent";
 					submenuContentElement.id = contentId;
 					submenuContentElement.setAttribute(ROLE, "menu");
 					branchElement.appendChild(submenuContentElement);

@@ -31,10 +31,14 @@ define(["wc/dom/classList",
 		 * @private
 		 */
 		function DialogFrame() {
-			var DIALOG_ID = "${wc.ui.dialog.id}",
+			var TEMPLATE_NAME = "dialog.xml",
+				DIALOG_ID = "${wc.ui.dialog.id}",
 				CONTENT_BASE_CLASS = "content",
 				INITIAL_TOP_PROPORTION = 0.33,  // when setting the initial position offset the dialog so that the gap at the top is this proportion of the difference between the dialog size and viewport size
 				openerId,
+				subscriber ={
+					close: null
+				},
 				DIALOG = new Widget("${wc.dom.html5.element.dialog}"),
 				DIALOG_CONTENT_WRAPPER = new Widget("div", CONTENT_BASE_CLASS, {"aria-live": "assertive"}),
 				BUTTON = new Widget("button"),
@@ -50,7 +54,6 @@ define(["wc/dom/classList",
 				UNIT = "px",
 				repositionTimer,
 				notMobile = !has("device-mobile"),
-				FORM,
 				REJECT = {
 					ALREADY_OPEN: "Cannot open a dialog whilst another dialog is open",
 					CANNOT_BUILD: "Cannot create the dialog frame",
@@ -97,10 +100,7 @@ define(["wc/dom/classList",
 					else if ((formId = candidate.form)) {
 						return document.getElementById(formId);
 					}
-					else {
-						FORM = FORM || new Widget("form");
-						return FORM.getAncestor(candidate);
-					}
+					return FORM.findAncestor(candidate);
 				}
 				else { // no clue to the form get the last form in the view
 					forms = document.getElementsByTagName("form");
@@ -223,6 +223,7 @@ define(["wc/dom/classList",
 					title.innerHTML = ""; // ??? This _cannot_ really still be needed?
 					title.innerHTML = (obj && obj.title) ? obj.title : i18n.get("${wc.ui.dialog.title.noTitle}");
 				}
+				subscriber.close = obj.onclose;
 
 			}
 
@@ -376,7 +377,7 @@ define(["wc/dom/classList",
 			 * @returns {Promise} resolved with {Element} dialog The dialog element.
 			 */
 			function buildDialog(formId) {
-				return loader.load("dialog.xml", true, true).then(function(template) {
+				return loader.load(TEMPLATE_NAME, true, true).then(function(template) {
 					/*
 					 * sprintf replacements
 					 * 1: maximise button title ${wc.ui.dialog.title.maxRestore}
@@ -534,7 +535,7 @@ define(["wc/dom/classList",
 			 * @param {Element} element The element being hidden.
 			 */
 			function shedHideSubscriber(element) {
-				var control;
+				var control, callback;
 				try {
 					if (element && element.id === DIALOG_ID) {
 						modalShim.clearModal(element);
@@ -553,6 +554,16 @@ define(["wc/dom/classList",
 
 						if (openerId && (control = document.getElementById(openerId))) {
 							focus.setFocusRequest(control);
+						}
+						if (subscriber.close) {
+							try {
+								callback = subscriber.close;
+								subscriber.close = null;
+								callback();
+							}
+							catch (ex) {
+								console.warn(ex);
+							}
 						}
 					}
 				}
@@ -677,6 +688,7 @@ define(["wc/dom/classList",
 				processResponse.subscribe(ajaxSubscriber, true);
 				shed.subscribe(shed.actions.SHOW, shedShowSubscriber);
 				shed.subscribe(shed.actions.HIDE, shedHideSubscriber);
+				loader.preload(TEMPLATE_NAME);
 			};
 
 			/**

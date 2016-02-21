@@ -21,23 +21,23 @@
 		being transformed. The majority of the transform for each of these components
 		is identical, hence their agglomeration here.
    -->
-	<xsl:template match="ui:textField|ui:phoneNumberField|ui:emailField|ui:numberField|ui:passwordField">
+	<xsl:template match="ui:textfield|ui:phonenumberfield|ui:emailfield|ui:numberfield|ui:passwordfield">
 		<xsl:variable name="id" select="@id"/>
 		<xsl:variable name="type">
 			<xsl:choose>
-				<xsl:when test="self::ui:textField">
+				<xsl:when test="self::ui:textfield">
 					<xsl:text>text</xsl:text>
 				</xsl:when>
-				<xsl:when test="self::ui:numberField">
+				<xsl:when test="self::ui:numberfield">
 					<xsl:text>number</xsl:text>
 				</xsl:when>
-				<xsl:when test="self::ui:passwordField">
+				<xsl:when test="self::ui:passwordfield">
 					<xsl:text>password</xsl:text>
 				</xsl:when>
-				<xsl:when test="self::ui:emailField">
+				<xsl:when test="self::ui:emailfield">
 					<xsl:text>email</xsl:text>
 				</xsl:when>
-				<xsl:when test="self::ui:phoneNumberField">
+				<xsl:when test="self::ui:phonenumberfield">
 					<xsl:text>tel</xsl:text>
 				</xsl:when>
 			</xsl:choose>
@@ -78,19 +78,28 @@
 							<xsl:value-of select="$$${wc.common.i18n.requiredPlaceholder}"/>
 						</xsl:attribute>
 					</xsl:if>
-					<xsl:if test="@list">
+					<xsl:variable name="list" select="@list"/>
+					<xsl:if test="$list">
 						<xsl:attribute name="role">
 							<xsl:text>combobox</xsl:text>
-						</xsl:attribute>
-						<xsl:attribute name="aria-autocomplete">
-							<xsl:text>both</xsl:text>
 						</xsl:attribute>
 						<!-- every input that implements combo should have autocomplete turned off -->
 						<xsl:attribute name="autocomplete">
 							<xsl:text>off</xsl:text>
 						</xsl:attribute>
 						<xsl:attribute name="aria-owns">
-							<xsl:value-of select="@list"/>
+							<xsl:value-of select="$list"/>
+						</xsl:attribute>
+						<xsl:variable name="suggestionList" select="//ui:suggestions[@id=$list]"/>
+						<xsl:attribute name="aria-autocomplete">
+							<xsl:choose>
+								<xsl:when test="$suggestionList and $suggestionList/@autocomplete">
+									<xsl:value-of select="$suggestionList/@autocomplete"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>both</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:attribute>
 					</xsl:if>
 					<xsl:attribute name="type">
@@ -99,22 +108,20 @@
 					<xsl:attribute name="value">
 						<xsl:value-of select="."/>
 					</xsl:attribute>
-					<xsl:if test="@size and not(self::ui:numberField)">
+					<xsl:if test="@size and not(self::ui:numberfield)">
 						<xsl:attribute name="size">
 							<xsl:value-of select="@size"/>
 						</xsl:attribute>
 					</xsl:if>
-					<xsl:if test="self::ui:numberField">
+					<xsl:if test="self::ui:numberfield">
 						<!--
-							Turning off autocomplete is CRITICAL in Internet Explorer (8, others untested,
-							but those with a native HTML5 number field are probably going to be OK).
-							It tooks me days to find this after tearing apart the entire framework.
-							Here's the issue:
-								In Internet Explorer the autocomplete feature on an input field
-								causes the keydown event to be cancelled once there is something in
-								the autocomplete list, i.e. once you have entered something into that field.
-								So your event listeners are called with a cancelled event but you can find no
-								code that cancels the event - very tricky to track down.
+							Turning off autocomplete is CRITICAL in Internet Explorer (8, others untested, but those
+							with a native HTML5 number field are probably going to be OK). It tooks me days to find this
+							after tearing apart the entire framework. Here's the issue:
+								In Internet Explorer the autocomplete feature on an input field causes the keydown event
+								to be cancelled once there is something in the autocomplete list, i.e. once you have
+								entered something into that field. So your event listeners are called with a cancelled
+								event but you can find no code that cancels the event - very tricky to track down.
 						-->
 						<xsl:attribute name="autocomplete">
 							<xsl:text>off</xsl:text>
