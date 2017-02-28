@@ -5,8 +5,71 @@
 ## API Changes
 
 ## Bug Fixes
+* Fixed bug in able actions which could result in action buttons being in the incorrect (enabled) state if the table
+  isloaded via AJAX #1049.
+* Fixed a bug in modalShim which resulted in accesskeys being stripped from inside WDialog content #1051.
+* Fixed AbstractContainerHelper to transform custom error pages #1103.
 
 ## Enhancements
+
+# Release 1.3.2
+
+## Bug Fixes
+* Fixed a bug in XSLT which caused processor errors if an instance of Input has more than one validation error #1042.
+* Fixed a bug in subordinate JavaScript which caused WMultiSelectPair to fail as a subordinate trigger #1044.
+
+## Enhancements
+* Reduced logging "noise" when the corrupt characters flag is enabled #1039
+
+# Release 1.3.1
+
+## API Changes
+* Deprecated xslt server side property. Will always return true.
+
+## Bug Fixes
+
+## Enhancements
+
+# Release 1.3.0
+
+## API Changes
+
+* 'UIContext' interface has been changed to include a new request scope scratch map #192.
+
+## Bug Fixes
+
+* Fix bug which allowed files larger than max allowed size to be uploaded using WMultiFileWidget #1024.
+* Fixed position of validation errors in WMultiSelectPair #1021.
+* Fixed content of labels in error messages #1019.
+* Prevent pending i18n bug by applying a cache buster to requests for i18n resource bundles #1016.
+* Fix possible a11y flaw by updating exposure of minlength to comply with HTML spec #1006.
+* Fix examples-lde default config #1005
+* Ensure file upload progress bars are shown for all asynchronous file uploads #1000.
+* Fix a11y issue by ensuring popups are always scrollable and resizeable #997.
+* Handle Google translate locales in i18n #994.
+* Fixed WMultiFileWidget and WrongStepAjaxInterceptor that were sending XML responses that were not being
+  transformed #990.
+
+## Enhancements
+
+* Output component name hint for Inputs in a read-only state to improve Selenium testing #1029.
+* Improve performance by not calling unnecessary preparePaint in DataListInterceptor #975.
+* Improve performance and type-safety of XSLT.
+* `WBeanComponent` has been changed that when a `BeanProvider` is being used it can now use the new request scope
+  scratch map to hold the bean. To opt into this functionality set the runtime parameter
+  `bordertech.wcomponents.bean.provider.request.scope.enabled` to true #192.
+* ServletResponse changed to provide access to the backing httpServletResponse #803.
+
+# Release 1.2.15
+
+## API Changes
+
+## Bug Fixes
+
+## Enhancements
+* Allow handlebars templates to be rendered on the server to complete theme i18n.
+* Backport interceptor chain fix #993.
+* Fix loading shim "stuck" on IE8
 
 # Release 1.2.14
 
